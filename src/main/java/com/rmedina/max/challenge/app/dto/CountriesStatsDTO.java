@@ -1,11 +1,11 @@
-package com.rmedina.max.challenge.app.models.dto;
+package com.rmedina.max.challenge.app.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CountryDistributionDTO implements Serializable{
+public class CountriesStatsDTO implements Serializable{
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class CountryDistributionDTO implements Serializable{
 	private String country;
 	private List<Map<String, Object>> market;
 	
-	public CountryDistributionDTO() {
+	public CountriesStatsDTO() {
 		market = new ArrayList<>();
 	}
 

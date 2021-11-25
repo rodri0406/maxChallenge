@@ -1,7 +1,5 @@
 package com.rmedina.max.challenge.app.models.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.rmedina.max.challenge.app.models.dao.ICommitentDao;
+import com.rmedina.max.challenge.app.exception.InvalidCountryException;
+import com.rmedina.max.challenge.app.exception.NotAssociatedIdException;
 import com.rmedina.max.challenge.app.models.dao.IMarketDao;
-import com.rmedina.max.challenge.app.models.entities.Commitent;
 import com.rmedina.max.challenge.app.models.entities.Market;
 
 @Service
@@ -20,42 +18,45 @@ public class MarketService {
 	@Autowired
 	private IMarketDao marketDao;
 	
-	//TODO para esto a una base  de datos o configuraciones
-	public static final List<String> countriesAvailable = Arrays.asList("AR", "UY");
-	
+	@Value("${spring.main.countries.available}")
+	private List<String> countriesAvailable;
 	
 	
 	public Market create(Market market) {
-		if(countriesAvailable.contains(market.getCountry())){
-			return marketDao.save(market);
-		} else {
-			//TODO cambiar por manejo de exceptions
-			return null;
+		
+		if(!countriesAvailable.contains(market.getCountry())){
+			throw new InvalidCountryException("EL país no esta permitido"); 
 		}
+		
+		return marketDao.save(market);
 	}
 	
-	public Optional<Market> read(Long id) {
-		//TODO manejar con exceptions
-		return marketDao.findById(id);
+	public Market read(Long id) {
+		
+		Optional<Market> optionalMarket = marketDao.findById(id);
+		
+		if(!optionalMarket.isPresent()) {
+			throw new NotAssociatedIdException("El elemento no existe");
+			
+		}
+		
+		return optionalMarket.get();
 	}
 	
 	
 	public Market update(Market market) {
 		
 		if(market.getId() == null ) {
-			return null;
+			throw new NotAssociatedIdException("El id es inválido");
 		}
 		
-		Optional<Market> optionalMarket = this.read(market.getId());
+		this.read(market.getId());
 		
-		if(optionalMarket.isPresent()) {
-			return this.create(market);
-		}
-		
-		return null;
+		return this.create(market);
 	}
 	
 	public void delete(Long id) {
+		this.read(id);
 		marketDao.deleteById(id);
 	}
 	

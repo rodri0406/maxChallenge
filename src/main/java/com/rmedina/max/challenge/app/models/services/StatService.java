@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Locale.IsoCountryCode;
 
-import org.apache.catalina.DistributedManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.rmedina.max.challenge.app.dto.CountriesStatsDTO;
 import com.rmedina.max.challenge.app.models.dao.ICommitentDao;
 import com.rmedina.max.challenge.app.models.dao.IMarketDao;
-import com.rmedina.max.challenge.app.models.dto.CountryDistributionDTO;
 import com.rmedina.max.challenge.app.models.entities.Market;
 
 @Service
@@ -21,30 +20,35 @@ public class StatService {
 	@Autowired
 	private IMarketDao marketDao;
 	
+	@Value("${spring.main.countries.available}")
+	private List<String> countriesAvailable;
+	
 	@Autowired
 	private ICommitentDao commitentDao;
 	
-	public List<CountryDistributionDTO>  getDistributionAndCountries() {
+	public List<CountriesStatsDTO>  getDistributionAndCountries() {
 		
-		List<CountryDistributionDTO> result = new ArrayList<>();
+		List<CountriesStatsDTO> result = new ArrayList<>();
 		
-		CountryDistributionDTO countrydistribution = null;
+		CountriesStatsDTO countriesStats = null;
+		
 		long commitentSize = commitentDao.count();
 		
-		List<Market> marketList = null;
+		List<Market> markets = null;
+		
 		Map<String, Object> marketResult = null;
 		Map<String, Object> percentage = null;
 		
-		for(String code: MarketService.countriesAvailable) {
+		for(String code: countriesAvailable) {
 		
-			countrydistribution = new CountryDistributionDTO();
+			countriesStats = new CountriesStatsDTO();
 			marketResult = new HashMap<>();
 			
-			countrydistribution.setCountry(code);
+			countriesStats.setCountry(code);
 			
-			marketList = marketDao.findByCountry(code);
+			markets = marketDao.findByCountry(code);
 			
-			for(Market market: marketList) {
+			for(Market market: markets) {
 			
 				percentage = new HashMap<>();
 
@@ -58,8 +62,8 @@ public class StatService {
 				
 			}
 
-			countrydistribution.add(marketResult);	
-			result.add(countrydistribution);
+			countriesStats.add(marketResult);	
+			result.add(countriesStats);
 		}
 		
 		

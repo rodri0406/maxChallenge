@@ -1,7 +1,6 @@
 package com.rmedina.max.challenge.app.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -23,7 +22,7 @@ import com.rmedina.max.challenge.app.models.services.MarketService;
 
 @RestController
 @RequestMapping("/market")
-public class MarketController {
+public class MarketController extends AbsController {
 	
 
 	@Autowired
@@ -32,69 +31,34 @@ public class MarketController {
 	@Transactional(readOnly = true)
 	@GetMapping
 	public ResponseEntity<List<Market>> list() {
-		try {
-			return new ResponseEntity<List<Market>>(marketService.list(), HttpStatus.OK);
-		} catch (Throwable e) {
-			return new ResponseEntity<List<Market>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<List<Market>>(marketService.list(), HttpStatus.OK);
+	
 	}
 	
 	@Transactional(readOnly = true)
 	@GetMapping("/{id}")
 	public ResponseEntity<Market> read(@PathVariable(value = "id") Long id) {
-		try {
-			Optional<Market> optionalMarket = marketService.read(id);
-			if(optionalMarket.isPresent()) {
-				return new ResponseEntity<Market>(optionalMarket.get(), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Market>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Throwable e) {
-			return new ResponseEntity<Market>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<Market>(marketService.read(id), HttpStatus.OK);
 	}
 	
 	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
-		try {
-			marketService.delete(id);
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		} catch (Throwable e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		marketService.delete(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@Transactional
 	@PostMapping
 	public ResponseEntity<Market> create(@RequestBody Market market) {
-		try {
-			Market marketCreated = marketService.create(market);
-			if(marketCreated != null) {
-				return new ResponseEntity<Market>(marketService.create(market), HttpStatus.OK);
-			} else {
-				//TODO cambiar por manejo d e excetion apra mostrar msj acorder
-				return new ResponseEntity<Market>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		} catch (Throwable e) {
-			return new ResponseEntity<Market>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<Market>(marketService.create(market), HttpStatus.OK);
 	}
 	
 	@Transactional
 	@PutMapping
 	public ResponseEntity<Market> update(@RequestBody @Valid Market market) {
-		try {
-			Market marketUpdated = marketService.update(market);
-			
-			if(marketUpdated != null ) {
-				return new ResponseEntity<Market>(marketUpdated, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Market>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Throwable e) {
-			return new ResponseEntity<Market>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		Market marketUpdated = marketService.update(market);	
+		return new ResponseEntity<Market>(marketUpdated, HttpStatus.OK);	
 	}
 
 

@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rmedina.max.challenge.app.exception.NotAssociatedIdException;
+import com.rmedina.max.challenge.app.exception.NotExistElementException;
+import com.rmedina.max.challenge.app.exception.NotMarketAssociatedException;
 import com.rmedina.max.challenge.app.models.dao.ICommitentDao;
 import com.rmedina.max.challenge.app.models.entities.Commitent;
 
@@ -16,21 +19,37 @@ public class CommitentService {
 	
 	
 	public Commitent create(Commitent commitent) {
+
+		if(commitent.getCommitentMarkets().isEmpty()) {
+			throw new NotMarketAssociatedException("Debe tener al menos un mercado asociado");
+		}
+		
 		return commitentDao.save(commitent);
 	}
 	
-	public Optional<Commitent> read(Long id) {
-		//TODO manejar con exceptions
-		return commitentDao.findById(id);
+	public Commitent read(Long id) {
+		Optional<Commitent> commitentOptional = commitentDao.findById(id);
+		
+		if(!commitentOptional.isPresent()) {
+			throw new NotExistElementException("El elemento no existe");
+		}
+		
+		return commitentOptional.get();
 	}
 	
 	
 	public Commitent update(Commitent commitent) {
-		//TODO manejar con exceptions
+		if(commitent.getId() == null ) {
+			throw new NotAssociatedIdException("El id es inválido");
+		}
+		
+		this.read(commitent.getId());
+		
 		return this.create(commitent);
 	}
 	
 	public void delete(Long id) {
+		this.read(id);
 		commitentDao.deleteById(id);
 	}
 	

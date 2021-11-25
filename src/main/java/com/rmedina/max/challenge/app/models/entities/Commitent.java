@@ -2,12 +2,9 @@ package com.rmedina.max.challenge.app.models.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "commitents")
@@ -30,8 +30,12 @@ public class Commitent implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Size(max = 200, message = "Supera el máximo de caracteres")
+	@NotBlank(message = "No puede  ser vacío")
 	private String description;
 	
+	@NotEmpty(message = "Debe tener al menos un mercado")
+	//TODO ver tema DETACH
 	@ManyToMany(cascade = CascadeType.DETACH)
 	@JoinTable(name = "commitent_market", joinColumns = @JoinColumn(name = "commitent_id"), inverseJoinColumns = @JoinColumn(name = "market_id"))
 	private List<Market> commitentMarkets;
@@ -40,6 +44,14 @@ public class Commitent implements Serializable {
 		commitentMarkets = new ArrayList<>();
 	}
 
+	
+
+	public Commitent(Long id, String description, List<Market> commitentMarkets) {
+		super();
+		this.id = id;
+		this.description = description;
+		this.commitentMarkets = commitentMarkets;
+	}
 
 	public Long getId() {
 		return id;

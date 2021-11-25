@@ -1,21 +1,16 @@
 package com.rmedina.max.challenge.app.models.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,10 +27,16 @@ public class Market implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Size(max = 100, message = "Supera el máximo de caracteres")
+	@NotBlank(message = "No puede  ser vacío")
 	private String code;
 	
+	@Size(max = 200, message = "Supera el máximo de caracteres")
+	@NotBlank(message = "No puede  ser vacío")
 	private String description;
 	
+	@Size(max = 50, message = "Supera el máximo de caracteres")
+	@NotBlank(message = "No puede  ser vacío")
 	private String country;
 	
 	@JsonIgnore
@@ -43,6 +44,19 @@ public class Market implements Serializable {
 	private List<Commitent> commitents;
 
 	
+	public Market() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Market(Long id, String code, String description, String country, List<Commitent> commitents) {
+		super();
+		this.id = id;
+		this.code = code;
+		this.description = description;
+		this.country = country;
+		this.commitents = commitents;
+	}
+
 	public Long getId() {
 		return id;
 	}
