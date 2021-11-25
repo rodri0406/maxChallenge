@@ -1,5 +1,6 @@
 package com.rmedina.max.challenge.app.models.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class CommitentService {
 		
 		return commitentOptional.get();
 	}
+	
+	public List<Commitent> list() {
+		return (List<Commitent>) commitentDao.findAll();
+	}
+	
 	
 	
 	public Commitent update(Commitent commitent) {

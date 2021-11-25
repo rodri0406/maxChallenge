@@ -1,11 +1,12 @@
 package com.rmedina.max.challenge.app.models.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,22 +36,29 @@ public class Commitent implements Serializable {
 	private String description;
 	
 	@NotEmpty(message = "Debe tener al menos un mercado")
-	//TODO ver tema DETACH
-	@ManyToMany(cascade = CascadeType.DETACH)
+	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name = "commitent_market", joinColumns = @JoinColumn(name = "commitent_id"), inverseJoinColumns = @JoinColumn(name = "market_id"))
-	private List<Market> commitentMarkets;
+	private Set<Market> commitentMarkets;
 	
 	public Commitent() {
-		commitentMarkets = new ArrayList<>();
+		commitentMarkets = new HashSet<>();
 	}
 
 	
 
-	public Commitent(Long id, String description, List<Market> commitentMarkets) {
+	public Commitent(Long id, String description, Set<Market> commitentMarkets) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.commitentMarkets = commitentMarkets;
+	
+	}
+	
+	public Commitent(Long id, String description) {
+		super();
+		this.id = id;
+		this.description = description;
+		this.commitentMarkets = new HashSet<>();
 	}
 
 	public Long getId() {
@@ -92,11 +100,11 @@ public class Commitent implements Serializable {
 		return true;
 	}
 
-	public List<Market> getCommitentMarkets() {
+	public Set<Market> getCommitentMarkets() {
 		return commitentMarkets;
 	}
 
-	public void setCommitentMarkets(List<Market> markets) {
+	public void setCommitentMarkets(Set<Market> markets) {
 		this.commitentMarkets = markets;
 	}
 	

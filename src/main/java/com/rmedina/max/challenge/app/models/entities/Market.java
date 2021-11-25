@@ -2,8 +2,11 @@ package com.rmedina.max.challenge.app.models.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,15 +43,14 @@ public class Market implements Serializable {
 	private String country;
 	
 	@JsonIgnore
-	@ManyToMany( mappedBy = "commitentMarkets")
-	private List<Commitent> commitents;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "commitentMarkets")
+	private Set<Commitent> commitents;
 
 	
 	public Market() {
-		// TODO Auto-generated constructor stub
 	}
 	
-	public Market(Long id, String code, String description, String country, List<Commitent> commitents) {
+	public Market(Long id, String code, String description, String country, Set<Commitent> commitents) {
 		super();
 		this.id = id;
 		this.code = code;
@@ -112,11 +114,11 @@ public class Market implements Serializable {
 		return true;
 	}
 
-	public List<Commitent> getCommitents() {
+	public Set<Commitent> getCommitents() {
 		return commitents;
 	}
 
-	public void setCommitents(List<Commitent> commitents) {
+	public void setCommitents(Set<Commitent> commitents) {
 		this.commitents = commitents;
 	}
 	

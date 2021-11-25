@@ -1,5 +1,7 @@
 package com.rmedina.max.challenge.app.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,12 @@ public class CommitentController extends AbsController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Commitent> read(@PathVariable(value = "id") Long id) {
 		return new ResponseEntity<Commitent>(commitentService.read(id), HttpStatus.OK);
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping
+	public ResponseEntity<List<Commitent>> list() {
+		return new ResponseEntity<List<Commitent>>(commitentService.list(), HttpStatus.OK);
 	}
 
 	@Transactional

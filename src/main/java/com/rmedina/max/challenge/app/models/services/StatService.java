@@ -22,9 +22,7 @@ public class StatService {
 	
 	@Value("${spring.main.countries.available}")
 	private List<String> countriesAvailable;
-	
-	@Autowired
-	private ICommitentDao commitentDao;
+
 	
 	public List<CountriesStatsDTO>  getDistributionAndCountries() {
 		
@@ -32,7 +30,7 @@ public class StatService {
 		
 		CountriesStatsDTO countriesStats = null;
 		
-		long commitentSize = commitentDao.count();
+		long commitentSize = marketDao.countCommitents();
 		
 		List<Market> markets = null;
 		
