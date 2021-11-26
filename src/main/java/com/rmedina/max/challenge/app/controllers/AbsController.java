@@ -3,8 +3,6 @@ package com.rmedina.max.challenge.app.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.ConstraintViolation;
-
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rmedina.max.challenge.app.dto.CountriesStatsDTO;
 import com.rmedina.max.challenge.app.models.services.StatService;
+
 
 @RestController
 public class StatController extends AbsController{
@@ -24,7 +24,6 @@ public class StatController extends AbsController{
 	public ResponseEntity<List<CountriesStatsDTO> > getDistributionAndCountries() {
 		return new ResponseEntity<List<CountriesStatsDTO> >(statService.getDistributionAndCountries(), HttpStatus.OK);
 		
-	}
-	
+	}	
 
 }
