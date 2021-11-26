@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rmedina.max.challenge.app.exception.InvalidCountryException;
 import com.rmedina.max.challenge.app.exception.NotAssociatedIdException;
+import com.rmedina.max.challenge.app.exception.NotExistElementException;
 import com.rmedina.max.challenge.app.models.dao.IMarketDao;
 import com.rmedina.max.challenge.app.models.entities.Market;
 
@@ -25,7 +26,7 @@ public class MarketService {
 	public Market create(Market market) {
 		
 		if(!countriesAvailable.contains(market.getCountry())){
-			throw new InvalidCountryException("EL país no esta permitido"); 
+			throw new InvalidCountryException("Los countries permitidos son " + countriesAvailable.toString() ); 
 		}
 		
 		return marketDao.save(market);
@@ -36,8 +37,7 @@ public class MarketService {
 		Optional<Market> optionalMarket = marketDao.findById(id);
 		
 		if(!optionalMarket.isPresent()) {
-			throw new NotAssociatedIdException("El elemento no existe");
-			
+			throw new NotExistElementException("El elemento no existe");		
 		}
 		
 		return optionalMarket.get();

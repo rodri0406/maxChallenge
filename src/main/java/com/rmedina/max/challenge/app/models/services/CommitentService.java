@@ -16,8 +16,7 @@ import com.rmedina.max.challenge.app.models.entities.Commitent;
 public class CommitentService {
 
 	@Autowired
-	private ICommitentDao commitentDao;
-	
+	private ICommitentDao commitentDao;	
 	
 	public Commitent create(Commitent commitent) {
 

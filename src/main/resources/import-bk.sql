@@ -1,0 +1,10 @@
+insert into markets (code, country, description) values ('MAGALLANES', 'AR', 'soy MAGALLANES');
+insert into markets (code, country, description) values ('FOREX', 'AR', 'Soy FOREX');
+insert into markets (code, country, description) values ('CRYPTO', 'UY', 'Soy CRYPTO');
+insert into markets (code, country, description) values ('EURO', 'UY', 'Soy EURO');
+insert into commitents (description) values ('Cuenta commitente 1');
+insert into commitents (description) values ('Cuenta commitente 2');
+insert into commitents (description) values ('Cuenta commitente 3');
+insert into commitent_market (commitent_id, market_id) values (1, 1);
+insert into commitent_market (commitent_id, market_id) values (2, 1);
+insert into commitent_market (commitent_id, market_id) values (3, 3);

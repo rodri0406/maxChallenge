@@ -3,6 +3,10 @@ package com.rmedina.max.challenge.app.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.ConstraintViolation;
+
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -62,6 +66,20 @@ public abstract class AbsController {
 		errors.put("errores", map);
 		return errors;
 	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	public Map<String, Map<String, String>> requestParamsError(DataIntegrityViolationException ex) {
+		Map<String, String> map = new HashMap<>();
+		Map<String, Map<String, String>> errors = new HashMap<>();
+
+			 map.put("error", "No se pudo persistir el elemento");
+		
+
+		errors.put("errores", map);
+		return errors;
+	}
+
 	
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
@@ -69,7 +87,15 @@ public abstract class AbsController {
 		Map<String, String> map = new HashMap<>();
 		Map<String, Map<String, String>> errors = new HashMap<>();
 
-		map.put("error", ex.getMessage());
+		 if (ex.getCause() instanceof ConstraintViolationException) {
+			ConstraintViolationException exConstraint = (ConstraintViolationException) ex;	
+			 map.put(exConstraint.getConstraintName(), String.valueOf(exConstraint.getErrorCode()));
+
+		    } else {
+		    	map.put("error", ex.getMessage());
+				    	
+		    }
+		
 
 		errors.put("errores", map);
 		return errors;

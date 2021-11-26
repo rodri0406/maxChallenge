@@ -5,11 +5,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +16,7 @@ import org.springframework.boot.test.mock.mockito.*;
 
 import com.rmedina.max.challenge.app.data.Data;
 import com.rmedina.max.challenge.app.dto.CountriesStatsDTO;
-import com.rmedina.max.challenge.app.exception.NotExistElementException;
-import com.rmedina.max.challenge.app.exception.NotMarketAssociatedException;
-import com.rmedina.max.challenge.app.models.dao.ICommitentDao;
 import com.rmedina.max.challenge.app.models.dao.IMarketDao;
-import com.rmedina.max.challenge.app.models.entities.Commitent;
 import com.rmedina.max.challenge.app.models.entities.Market;
 
 @SpringBootTest
@@ -50,9 +43,9 @@ class StatsServiceTest {
 			List<Market> markets;
 			switch(code) {
 			case "AR":
-				markets = Data.MARKETS_AR_COMMITENT_EMPTY;
+				markets = Data.getMarketARCommitentEmpty();
 			case "UY":
-				markets = Data.MARKETS_UY_COMMITENT_EMPTY;
+				markets = Data.getMarketUYCommitentEmpty();
 			default:
 				markets = new ArrayList<>();
 				
@@ -79,7 +72,7 @@ class StatsServiceTest {
 			List<Market> markets;
 			switch(code) {
 			case "AR":
-				markets = Arrays.asList(Data.MARKET_AR);
+				markets = Arrays.asList(Data.getMarketAR());
 				break;
 			case "UY":
 				markets = new ArrayList<>();
@@ -92,7 +85,7 @@ class StatsServiceTest {
 			return markets;
 		}).when(marketDao).findByCountry(anyString());
 		
-		when(marketDao.countCommitents()).thenReturn(3l);
+		when(marketDao.countCommitents()).thenReturn((long)Data.getMarketAR().getCommitents().size());
 		
 		List<CountriesStatsDTO> distribution = statService.getDistributionAndCountries();
 		Map<String, String> forexPercentage = (Map<String, String>) distribution.get(0).getMarket().get(0).get("FOREX");
@@ -110,10 +103,10 @@ class StatsServiceTest {
 			List<Market> markets;
 			switch(code) {
 			case "AR":
-				markets = Arrays.asList(Data.MARKET_AR);
+				markets = Arrays.asList(Data.getMarketAR());
 				break;
 			case "UY":
-				markets = Arrays.asList(Data.MARKET_UY);
+				markets = Arrays.asList(Data.getMarketYU());
 				break;
 			default:
 				markets = new ArrayList<>();
@@ -123,13 +116,13 @@ class StatsServiceTest {
 			return markets;
 		}).when(marketDao).findByCountry(anyString());
 		
-		when(marketDao.countCommitents()).thenReturn(6l);
+		when(marketDao.countCommitents()).thenReturn((long)Data.getMarketAR().getCommitents().size() + Data.getMarketYU().getCommitents().size());
 		
 		List<CountriesStatsDTO> distribution = statService.getDistributionAndCountries();
 		Map<String, String> forexPercentage = (Map<String, String>) distribution.get(0).getMarket().get(0).get("FOREX");
 		
 		assertFalse(distribution.isEmpty());
-		assertEquals("50,00", forexPercentage.get("percentage"));
+		assertEquals("57,14", forexPercentage.get("percentage"));
 	}
 		
 

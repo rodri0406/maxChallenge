@@ -23,12 +23,8 @@ public class StatController extends AbsController{
 	@Transactional(readOnly = true)
 	@GetMapping
 	public ResponseEntity<List<CountriesStatsDTO> > getDistributionAndCountries() {
-		try {
-				return new ResponseEntity<List<CountriesStatsDTO> >(statService.getDistributionAndCountries(), HttpStatus.OK);
-			
-		} catch (Throwable e) {
-			return new ResponseEntity<List<CountriesStatsDTO> >(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<List<CountriesStatsDTO> >(statService.getDistributionAndCountries(), HttpStatus.OK);
+		
 	}
 	
 
