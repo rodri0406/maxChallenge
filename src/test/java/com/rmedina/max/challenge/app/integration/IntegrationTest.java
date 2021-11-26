@@ -1,17 +1,9 @@
 package com.rmedina.max.challenge.app.integration;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -25,7 +17,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,7 +27,7 @@ import com.rmedina.max.challenge.app.models.entities.Market;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommitentIntegrationTest {
+public class IntegrationTest {
 
 	@Autowired
 	private TestRestTemplate client;
@@ -75,8 +66,6 @@ public class CommitentIntegrationTest {
 
 		response = client.postForEntity(buildURL("/commitent"), commitent, String.class);
 
-		System.out.println(response);
-
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
 		assertNotNull(response.getBody());
@@ -91,9 +80,7 @@ public class CommitentIntegrationTest {
 	@Order(2)
 	void readTest() throws JsonProcessingException {
 
-		ResponseEntity<String> response = client.getForEntity(buildURL("/commitent"), String.class, 1);
-
-		System.out.println(response);
+		ResponseEntity<String> response = client.getForEntity(buildURL("/commitent/1"), String.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
