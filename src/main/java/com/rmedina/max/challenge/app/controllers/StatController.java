@@ -14,14 +14,13 @@ import com.rmedina.max.challenge.app.dto.CountriesStatsDTO;
 import com.rmedina.max.challenge.app.models.services.StatService;
 
 @RestController
-@RequestMapping("/stats")
 public class StatController extends AbsController{
 	
 	@Autowired
 	private StatService statService;
 
 	@Transactional(readOnly = true)
-	@GetMapping
+	@GetMapping(value = {"/", "/stats"})
 	public ResponseEntity<List<CountriesStatsDTO> > getDistributionAndCountries() {
 		return new ResponseEntity<List<CountriesStatsDTO> >(statService.getDistributionAndCountries(), HttpStatus.OK);
 		
